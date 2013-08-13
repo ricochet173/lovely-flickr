@@ -5,7 +5,14 @@ Flickr::Application.routes.draw do
 
   resources :videos
 
-  resources :photos
+  resources :photos do
+    collection do
+      post "search", to: "photos#search"
+    end
+    member do
+      post :buy
+    end
+  end
 
   resources :sessions, only: [:new, :create, :destroy]
 

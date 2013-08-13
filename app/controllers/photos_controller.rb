@@ -1,6 +1,6 @@
 class PhotosController < ApplicationController
 
-  before_action :require_current_user, except: [:show]
+  before_action :require_current_user, except: [:show, :search]
 
   def index
     render text: "Coming soon!"
@@ -21,6 +21,26 @@ class PhotosController < ApplicationController
 
     redirect_to photo_path(@photo)
   end
+  
+  def search
+    @results = Photo.search_for params[:query]
+  end
+  
+  def buy
+    customer = Stripe::Customer.create(
+      email: params[:email],
+      card: params[:stripeToken]
+      )
+    Stripe::Charge.create(
+      customer: customer.id,
+      amount: Photo::PRICE,
+      currency: 'cad'
+      )
+    rescue Stripe::CardError => error
+      flash[:error] = e.message
+      redirect_to photo_path(params[:id])
+   end
+
 
   private
 

@@ -6,3 +6,9 @@
   <div>File: <%= f.file_field :upload %></div>
   <div><%= f.submit "Upload Photo" %></div>
 <% end %>
+
+<h1>Search for a Flickr photo</h1>
+  <%= form_tag(search_photos_path) do -%>
+    <%= search_field_tag :query -%>
+    <%= submit_tag "Search" %>
+  <% end %>
